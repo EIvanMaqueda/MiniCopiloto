@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="map" class="map"></div>
+<div id="pano" class="pano"></div>
+
+
+<script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSKBDdPPlfca_zTwyxKiicRQn1qfgRjLw&callback=initMap">
+</script>
+
+<script type="text/javascript">
+    let map;
+    var jsonFile = [{ "Lat": 19.430343137052297, "Lng": -99.16151822922524 }, { "Lat": 19.429223805402366, "Lng": -99.16201408373863 }
+        , { "Lat": 19.42630788674067, "Lng": -99.1698273898041 }, { "Lat": 19.43111109974888, "Lng": -99.15875176181511 },
+        { "Lat": 19.436197453954872, "Lng": -99.15565714383966 }];
+    const uluru = { lat: 19.430073, lng: -99.162189 };
+    const fenway = { lat: 19.430343137052297, lng: -99.16151822922524 };
+    function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: uluru,
+            zoom: 14,
+        });
+
+        for (var i = 0; i < jsonFile.length; i++) {
+            const uluru2 = { lat: jsonFile[i].Lat, lng: jsonFile[i].Lng }
+            const marker = new google.maps.Marker({
+                position: uluru2,
+                map: map,
+            }).addListener("click", function () {
+
+                const panorama = new google.maps.StreetViewPanorama(
+                    document.getElementById("pano"),
+                    {
+                        position: uluru2,
+                        pov: {
+                            heading: 34,
+                            pitch: 10,
+                        },
+                    }
+                );
+                map.setStreetView(panorama);
+
+            });
+        }
+
+
+    }
+    window.initMap = initMap;
+</script>
